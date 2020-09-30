@@ -1,10 +1,17 @@
 package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class EvaluationService {
+
+	public static void main(String[] args) {
+		EvaluationService tester = new EvaluationService();
+
+		System.out.println(tester.cleanPhoneNumber(""));
+	}
 
 	/**
 	 * 1. Without using the StringBuilder or StringBuffer class, write a method that
@@ -15,7 +22,7 @@ public class EvaluationService {
 	 */
 	public String reverse(String string) {
 		char[] reversed = new char[string.length()];
-		for (int i = reversed.length - 1, j=0; i >= 0; i--, j++) {
+		for (int i = reversed.length - 1, j = 0; i >= 0; i--, j++) {
 			reversed[j] = string.charAt(i);
 		}
 		return new String(reversed);
@@ -30,8 +37,17 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String acronym(String phrase) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		String retVal = "";
+
+		phrase = phrase.toUpperCase();
+		String[] words = phrase.split("\\W");
+		for (String s : words) {
+			if (s.length() > 0) {
+				retVal += s.charAt(0);
+			}
+		}
+
+		return retVal;
 	}
 
 	/**
@@ -84,17 +100,27 @@ public class EvaluationService {
 		}
 
 		public boolean isEquilateral() {
-			// TODO Write an implementation for this method declaration
+			if (getSideOne() == getSideTwo()) {
+				if (getSideOne() == getSideThree()) {
+					return true;
+				}
+			}
 			return false;
 		}
 
 		public boolean isIsosceles() {
-			// TODO Write an implementation for this method declaration
+			if ((getSideOne() == getSideTwo()) || (getSideOne() == getSideThree())) {
+				return true;
+			}
 			return false;
 		}
 
 		public boolean isScalene() {
-			// TODO Write an implementation for this method declaration
+			if (getSideOne() != getSideTwo()) {
+				if (getSideOne() != getSideThree()) {
+					return true;
+				}
+			}
 			return false;
 		}
 
@@ -116,8 +142,55 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getScrabbleScore(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		string = string.toLowerCase();
+		Map<Character, Integer> m1 = new HashMap<>();
+		char[] alphabet = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+				's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
+
+		for (char c : alphabet) {
+			int value = 1;
+
+			switch (c) {
+			case 'd':
+			case 'g':
+				value = 2;
+				break;
+			case 'b':
+			case 'c':
+			case 'm':
+			case 'p':
+				value = 3;
+				break;
+			case 'f':
+			case 'h':
+			case 'v':
+			case 'w':
+			case 'y':
+				value = 4;
+				break;
+			case 'k':
+				value = 5;
+				break;
+			case 'j':
+			case 'x':
+				value = 8;
+				break;
+			case 'q':
+			case 'z':
+				value = 10;
+				break;
+			}
+
+			m1.put(c, value);
+		}
+
+		int score = 0;
+
+		for (int i = 0; i < string.length(); i++) {
+			score += m1.get(string.charAt(i));
+		}
+
+		return score;
 	}
 
 	/**
@@ -152,8 +225,13 @@ public class EvaluationService {
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
 	public String cleanPhoneNumber(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		String result = string.replaceAll("[^0-9+]", "");
+		
+		if ((result.length() > 11) || (result.length() < 10)) {
+			throw new IllegalArgumentException();
+		}
+
+		return result;
 	}
 
 	/**
