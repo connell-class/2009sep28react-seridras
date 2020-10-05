@@ -1,16 +1,19 @@
 package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 public class EvaluationService {
 
 	public static void main(String[] args) {
 		EvaluationService tester = new EvaluationService();
 
-		System.out.println(tester.cleanPhoneNumber(""));
+		System.out.println(tester.calculatePrimeFactorsOf(2L));
 	}
 
 	/**
@@ -226,7 +229,7 @@ public class EvaluationService {
 	 */
 	public String cleanPhoneNumber(String string) {
 		String result = string.replaceAll("[^0-9+]", "");
-		
+
 		if ((result.length() > 11) || (result.length() < 10)) {
 			throw new IllegalArgumentException();
 		}
@@ -244,8 +247,19 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Map<String, Integer> wordCount(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		Map<String, Integer> result = new HashMap<>();
+
+		String[] arr = string.split("[,\\s]+");
+
+		for (int i = 0; i < arr.length; i++) {
+			if (result.containsKey(arr[i])) {
+				result.replace(arr[i], result.get(arr[i]), result.get(arr[i]) + 1);
+			} else {
+				result.put(arr[i], 1);
+			}
+		}
+
+		return result;
 	}
 
 	/**
@@ -287,8 +301,26 @@ public class EvaluationService {
 		private List<T> sortedList;
 
 		public int indexOf(T t) {
-			// TODO Write an implementation for this method declaration
-			return 0;
+
+			int start = 0;
+			int end = sortedList.size() - 1;
+			int result = sortedList.size() - 1;
+
+			while (start <= end) {
+				int mid = (start + end) / 2;
+
+				if (t.equals(sortedList.get(mid))) {
+					result = sortedList.indexOf(t);
+					break;
+				}
+
+				if (sortedList.indexOf(t) < mid) {
+					end = mid - 1;
+				} else if (sortedList.indexOf(t) > mid) {
+					start = mid + 1;
+				}
+			}
+			return result;
 		}
 
 		public BinarySearch(List<T> sortedList) {
@@ -324,8 +356,42 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String toPigLatin(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		Scanner input = new Scanner(string);
+		StringBuilder sb = new StringBuilder();
+
+		Character[] vArr = { 'a', 'e', 'i', 'o', 'u' };
+		List<Character> vowels = Arrays.asList(vArr);
+
+		int firstVowel = 0;
+		String word = "";
+
+		while (input.hasNext()) {
+			word = input.next();
+			firstVowel = -1;
+
+			for (int i = 0; i < word.length(); i++) {
+				if ((vowels.contains(word.charAt(i)))
+						&& !((i > 0) && (word.charAt(i) == 'u') && (word.charAt(i - 1) == 'q'))) {
+					firstVowel = i;
+					break;
+				}
+			}
+
+			if (firstVowel >= 0) {
+				sb.append(word.substring(firstVowel));
+				sb.append(word.substring(0, firstVowel) + "ay");
+			} else {
+				sb.append(word);
+			}
+
+			if (input.hasNext()) {
+				sb.append(" ");
+			}
+		}
+
+		input.close();
+
+		return sb.toString();
 	}
 
 	/**
@@ -344,7 +410,20 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isArmstrongNumber(int input) {
-		// TODO Write an implementation for this method declaration
+		int digitCount = String.valueOf(input).length();
+		int temp = input;
+		int sum = 0;
+
+		while (temp > 0) {
+			int remainder = temp % 10;
+			sum += Math.pow(remainder, digitCount);
+			temp = temp / 10;
+		}
+
+		if (sum == input) {
+			return true;
+		}
+
 		return false;
 	}
 
@@ -359,8 +438,16 @@ public class EvaluationService {
 	 * @return
 	 */
 	public List<Long> calculatePrimeFactorsOf(long l) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		List<Long> factors = new LinkedList<>();
+
+		for (Long i = 2L; i <= l; i++) {
+			while (l % i == 0) {
+				factors.add(i);
+				l /= i;
+			}
+		}
+
+		return factors;
 	}
 
 	/**
